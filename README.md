@@ -48,9 +48,3 @@ AudioGearTracker ¬O¤@­Ó°ò©ó ASP.NET Core MVC ªº­µÅT¾¹§÷ºÞ²z¨t²Î¡A¨ó§U¥Î¤á°lÂÜ©Mº
     ```bash
     dotnet run --project AudioGearTracker
     ```
-
-## «Ý§ï¶i¨Æ¶µ (Known Issues / TODO)
-
-*   **¬[ºc¹H³W**: Controller ¥Ø«eª½±µ¨Ì¿à `AppDbContext`¡A¦Ó¤£¬O¨Ï¥Î `IRepository` ©Î Service¡C³o¹H¤Ï¤F¨Ì¿à¤ÏÂà­ì«h¡A¤]Åý Core ¼h©w¸qªº Repository ¤¶­±¨S¦³³Q¹ê»Ú¨Ï¥Î¡C
-*   **«eºÝ¤@­P©Ê**: ¥ý«eªº Bootstrap ²¾°£«á¡A³¡¤À¿ù»~­¶­±©ÎÅçÃÒ°T®§¼Ë¦¡¥i¯à»Ý­n·L½Õ¥H¾A°t Tailwind CSS¡C
-*   **ÅçÃÒÅÞ¿è**: ½T«O©Ò¦³ÃöÁpÄÝ©Ê (¦p Brand) ªºªÅ­È³B²z (Null Safety)¡C
