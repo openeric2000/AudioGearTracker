@@ -1,157 +1,113 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using AudioGearTracker.Core.Entities;
-using AudioGearTracker.Infrastructure.Data;
+using AudioGearTracker.Core.Interfaces; // 引用介面
 
-namespace AudioGearTracker.Controllers
+namespace AudioGearTracker.Controllers;
+
+public class BrandsController : Controller
 {
-    public class BrandsController : Controller
+    // 改用 Repository 介面，而不是直接依賴 DbContext
+    private readonly IRepository<Brand> _repository;
+
+    public BrandsController(IRepository<Brand> repository)
     {
-        private readonly AppDbContext _context;
+        _repository = repository;
+    }
 
-        public BrandsController(AppDbContext context)
+    // GET: Brands
+    public async Task<IActionResult> Index()
+    {
+        // 使用 Repository 的方法
+        return View(await _repository.GetAllAsync());
+    }
+
+    // GET: Brands/Details/5
+    public async Task<IActionResult> Details(int? id)
+    {
+        if (id == null) return NotFound();
+
+        var brand = await _repository.GetByIdAsync(id.Value);
+        if (brand == null) return NotFound();
+
+        return View(brand);
+    }
+
+    // GET: Brands/Create
+    public IActionResult Create()
+    {
+        return View();
+    }
+
+    // POST: Brands/Create
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Create([Bind("Id,Name,Country")] Brand brand)
+    {
+        if (ModelState.IsValid)
         {
-            _context = context;
-        }
-
-        // GET: Brands
-        public async Task<IActionResult> Index()
-        {
-            return View(await _context.Brands.ToListAsync());
-        }
-
-        // GET: Brands/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var brand = await _context.Brands
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (brand == null)
-            {
-                return NotFound();
-            }
-
-            return View(brand);
-        }
-
-        // GET: Brands/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: Brands/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Country")] Brand brand)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(brand);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(brand);
-        }
-
-        // GET: Brands/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var brand = await _context.Brands.FindAsync(id);
-            if (brand == null)
-            {
-                return NotFound();
-            }
-            return View(brand);
-        }
-
-        // POST: Brands/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Country")] Brand brand)
-        {
-            if (id != brand.Id)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(brand);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!BrandExists(brand.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(brand);
-        }
-
-        // GET: Brands/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var brand = await _context.Brands
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (brand == null)
-            {
-                return NotFound();
-            }
-
-            return View(brand);
-        }
-
-        // POST: Brands/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var brand = await _context.Brands.FindAsync(id);
-            if (brand != null)
-            {
-                _context.Brands.Remove(brand);
-            }
-
-            await _context.SaveChangesAsync();
+            await _repository.AddAsync(brand);
             return RedirectToAction(nameof(Index));
         }
+        return View(brand);
+    }
 
-        private bool BrandExists(int id)
+    // GET: Brands/Edit/5
+    public async Task<IActionResult> Edit(int? id)
+    {
+        if (id == null) return NotFound();
+
+        var brand = await _repository.GetByIdAsync(id.Value);
+        if (brand == null) return NotFound();
+        return View(brand);
+    }
+
+    // POST: Brands/Edit/5
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Country")] Brand brand)
+    {
+        if (id != brand.Id) return NotFound();
+
+        if (ModelState.IsValid)
         {
-            return _context.Brands.Any(e => e.Id == id);
+            try
+            {
+                await _repository.UpdateAsync(brand);
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (await _repository.GetByIdAsync(brand.Id) == null)
+                    return NotFound();
+                else
+                    throw;
+            }
+            return RedirectToAction(nameof(Index));
         }
+        return View(brand);
+    }
+
+    // GET: Brands/Delete/5
+    public async Task<IActionResult> Delete(int? id)
+    {
+        if (id == null) return NotFound();
+
+        var brand = await _repository.GetByIdAsync(id.Value);
+        if (brand == null) return NotFound();
+
+        return View(brand);
+    }
+
+    // POST: Brands/Delete/5
+    [HttpPost, ActionName("Delete")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeleteConfirmed(int id)
+    {
+        var brand = await _repository.GetByIdAsync(id);
+        if (brand != null)
+        {
+            await _repository.DeleteAsync(brand);
+        }
+        return RedirectToAction(nameof(Index));
     }
 }
