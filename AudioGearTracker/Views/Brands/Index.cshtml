@@ -1,41 +1,56 @@
 ﻿@model IEnumerable<AudioGearTracker.Core.Entities.Brand>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "品牌管理";
 }
 
-<h1>Index</h1>
+<div class="space-y-6">
+    <div class="flex justify-between items-center border-b border-gray-100 pb-4">
+        <h1 class="text-3xl font-black text-gray-800 tracking-tight">品牌管理</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="min-w-full divide-y divide-gray-200">
-    <thead class="bg-gray-50">
-        <tr>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                @Html.DisplayNameFor(model => model.Country)
-            </th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"></th>
-        </tr>
-    </thead>
-    <tbody class="bg-white divide-y divide-gray-200">
-@foreach (var item in Model) {
-        <tr>
-            <td class="px-6 py-4 whitespace-nowrap">
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td class="px-6 py-4 whitespace-nowrap">
-                @Html.DisplayFor(modelItem => item.Country)
-            </td>
-            <td class="px-6 py-4 whitespace-nowrap">
-                <a class="text-indigo-600 hover:text-indigo-900" asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a class="text-indigo-600 hover:text-indigo-900" asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a class="text-indigo-600 hover:text-indigo-900" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+        <a asp-action="Create" class="flex items-center px-5 py-2.5 bg-lilac hover:bg-lilac-hover text-white font-bold rounded-xl shadow-lg shadow-lilac/30 transition-all hover:-translate-y-0.5">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+            </svg>
+            新增品牌
+        </a>
+    </div>
+
+    <div class="overflow-hidden bg-white border border-gray-200 rounded-2xl shadow-sm">
+        <table class="w-full text-left border-collapse">
+            <thead class="bg-gray-50 border-b border-gray-200">
+                <tr>
+                    <th class="px-6 py-4 text-xs font-bold tracking-wider text-gray-500 uppercase">
+                        @Html.DisplayNameFor(model => model.Name)
+                    </th>
+                    <th class="px-6 py-4 text-xs font-bold tracking-wider text-gray-500 uppercase">
+                        @Html.DisplayNameFor(model => model.Country)
+                    </th>
+                    <th class="px-6 py-4 text-xs font-bold tracking-wider text-gray-500 uppercase text-right">
+                        操作
+                    </th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-100">
+                @foreach (var item in Model)
+                {
+                    <tr class="hover:bg-lilac-bg/30 transition-colors duration-150 group">
+                        <td class="px-6 py-4">
+                            <span class="font-bold text-gray-800 text-lg">@Html.DisplayFor(modelItem => item.Name)</span>
+                        </td>
+                        <td class="px-6 py-4">
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600 border border-gray-200">
+                                @Html.DisplayFor(modelItem => item.Country)
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 text-right space-x-3">
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="text-sm font-bold text-lilac hover:text-lilac-hover transition-colors">編輯</a>
+                            <span class="text-gray-300">|</span>
+                            <a asp-action="Delete" asp-route-id="@item.Id" class="text-sm font-bold text-red-400 hover:text-red-600 transition-colors">刪除</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
