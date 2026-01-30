@@ -20,10 +20,63 @@ namespace AudioGearTracker.Controllers
         }
 
         // GET: Equipments
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchString)
         {
-            var appDbContext = _context.Equipments.Include(e => e.Brand);
-            return View(await appDbContext.ToListAsync());
+            // 1. 使用 _context 取得所有資料 (包含關聯的 Brand)
+            // 注意：這裡改用 _context，並加上 Include 確保品牌名稱讀得到
+            var equipments = await _context.Equipments
+                                           .Include(e => e.Brand)
+                                           .ToListAsync();
+
+            // 2. 如果有搜尋字串，在記憶體中進行篩選
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                searchString = searchString.ToLower();
+
+                // 這裡的 Where 是針對 List 操作，支援 Enum 轉字串，非常安全
+                var filteredList = equipments.Where(e =>
+                    e.ModelName.ToLower().Contains(searchString) ||
+                    (e.Brand != null && e.Brand.Name.ToLower().Contains(searchString)) ||
+                    e.Type.ToString().ToLower().Contains(searchString)
+                ).ToList();
+
+                // 3. 儲存搜尋字串供 View 回填
+                ViewData["CurrentFilter"] = searchString;
+
+                return View(filteredList);
+            }
+
+            // 3. 如果沒搜尋，回傳全部
+            ViewData["CurrentFilter"] = searchString;
+            return View(equipments);
+        }
+
+        // GET: Equipments/SearchJson
+        // 這是一個 API，專門回傳 JSON 給即時搜尋框使用
+        [HttpGet]
+        public async Task<IActionResult> SearchJson(string term)
+        {
+            if (string.IsNullOrWhiteSpace(term)) return Json(new List<object>());
+
+            term = term.ToLower();
+
+            var results = await _context.Equipments
+                .Include(e => e.Brand)
+                .Where(e =>
+                    // 只搜尋 ModelName (型號) 和 Brand.Name (品牌)
+                    e.ModelName.ToLower().Contains(term) ||
+                    e.Brand.Name.ToLower().Contains(term)
+                )
+                .Select(e => new {
+                    id = e.Id,
+                    title = e.ModelName,
+                    subtitle = $"{e.Brand.Name} · {e.Type}",
+                    url = Url.Action("Details", "Equipments", new { id = e.Id })
+                })
+                .Take(8)
+                .ToListAsync();
+
+            return Json(results);
         }
 
         // GET: Equipments/Details/5

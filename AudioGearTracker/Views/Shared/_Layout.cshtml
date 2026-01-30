@@ -25,20 +25,108 @@
 </head>
 <body class="flex flex-col min-h-screen bg-gray-50">
     <header class="sticky top-0 z-50 backdrop-blur-md bg-white/80 border-b border-gray-200 shadow-sm">
-        <nav class="container mx-auto px-6 h-16 flex justify-between items-center">
-            <a asp-controller="Home" asp-action="Index" class="text-2xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-lilac to-purple-600 hover:opacity-80 transition-opacity">
+        <nav class="container mx-auto px-6 h-16 flex items-center justify-between gap-8">
+
+            <a asp-controller="Home" asp-action="Index" class="flex-shrink-0 text-2xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-lilac to-purple-600 hover:opacity-80 transition-opacity">
                 AudioGear<span class="text-gray-700">Tracker</span>
             </a>
 
-            <div class="flex items-center space-x-8">
-                <a asp-controller="Brands" asp-action="Index" class="text-sm font-medium text-gray-600 hover:text-lilac transition-colors">品牌管理</a>
+            <div class="relative flex-grow max-w-lg hidden md:block">
+                <div class="relative">
+                    <input type="text" id="global-search"
+                           placeholder="搜尋器材 (例如: Sony, DAC...)"
+                           class="w-full pl-10 pr-4 py-2 bg-gray-100 border-transparent text-gray-700 rounded-full focus:bg-white focus:border-lilac focus:ring-2 focus:ring-lilac/50 transition-all placeholder-gray-400 outline-none"
+                           autocomplete="off" />
 
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <svg class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>
+                    </div>
+                </div>
+
+                <div id="search-results" class="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden hidden z-50">
+                </div>
+            </div>
+
+            <div class="flex items-center space-x-6 flex-shrink-0">
+                <a asp-controller="Brands" asp-action="Index" class="text-sm font-medium text-gray-600 hover:text-lilac transition-colors hidden sm:block">品牌管理</a>
                 <a asp-controller="Equipments" asp-action="Index" class="px-5 py-2 text-sm font-bold text-white bg-lilac rounded-full shadow-lg shadow-lilac/30 hover:bg-lilac-hover hover:-translate-y-0.5 transition-all duration-300">
                     器材清單
                 </a>
             </div>
         </nav>
     </header>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('global-search');
+            const resultsBox = document.getElementById('search-results');
+            let debounceTimer;
+
+            // 監聽打字事件
+            searchInput.addEventListener('input', function(e) {
+                const term = e.target.value.trim();
+
+                // 清除之前的計時器 (Debounce: 避免每打一個字就發請求)
+                clearTimeout(debounceTimer);
+
+                if (term.length < 1) {
+                    resultsBox.classList.add('hidden');
+                    resultsBox.innerHTML = '';
+                    return;
+                }
+
+                // 延遲 300ms 後才發送請求
+                debounceTimer = setTimeout(() => {
+                    fetch(`/Equipments/SearchJson?term=${encodeURIComponent(term)}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            resultsBox.innerHTML = ''; // 清空舊結果
+
+                            if (data.length > 0) {
+                                resultsBox.classList.remove('hidden');
+                                data.forEach(item => {
+                                    // 建立選項 HTML
+                                    const a = document.createElement('a');
+                                    a.href = item.url;
+                                    a.className = 'block px-4 py-3 hover:bg-gray-50 transition-colors border-b border-gray-50 last:border-0 flex justify-between items-center';
+                                    a.innerHTML = `
+                                        <div>
+                                            <div class="font-bold text-gray-800">${item.title}</div>
+                                            <div class="text-xs text-gray-500">${item.subtitle}</div>
+                                        </div>
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                                        </svg>
+                                    `;
+                                    resultsBox.appendChild(a);
+                                });
+                            } else {
+                                // 查無資料
+                                resultsBox.classList.remove('hidden');
+                                resultsBox.innerHTML = `<div class="px-4 py-3 text-sm text-gray-400 text-center">找不到 "${term}" 相關的器材</div>`;
+                            }
+                        });
+                }, 300);
+            });
+
+            // 點擊外部時關閉選單
+            document.addEventListener('click', function(e) {
+                if (!searchInput.contains(e.target) && !resultsBox.contains(e.target)) {
+                    resultsBox.classList.add('hidden');
+                }
+            });
+
+            // 聚焦時如果有字就重新顯示
+            searchInput.addEventListener('focus', function() {
+                if (searchInput.value.trim().length > 0 && resultsBox.children.length > 0) {
+                    resultsBox.classList.remove('hidden');
+                }
+            });
+        });
+    </script>
+
     <main role="main" class="flex-grow container mx-auto px-6 py-8">
         @RenderBody()
     </main>
