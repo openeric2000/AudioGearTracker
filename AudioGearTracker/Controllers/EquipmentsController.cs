@@ -48,7 +48,7 @@ namespace AudioGearTracker.Controllers
         // GET: Equipments/Create
         public IActionResult Create()
         {
-            ViewData["BrandId"] = new SelectList(_context.Brands, "Id", "Country");
+            ViewData["BrandId"] = new SelectList(_context.Brands, "Id", "Name");
             return View();
         }
 
@@ -82,7 +82,7 @@ namespace AudioGearTracker.Controllers
             {
                 return NotFound();
             }
-            ViewData["BrandId"] = new SelectList(_context.Brands, "Id", "Country", equipment.BrandId);
+            ViewData["BrandId"] = new SelectList(_context.Brands, "Id", "Name", equipment.BrandId);
             return View(equipment);
         }
 
