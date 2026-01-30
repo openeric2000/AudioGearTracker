@@ -10,98 +10,90 @@ using AudioGearTracker.Core.Interfaces;
 
 namespace AudioGearTracker.Tests
 {
-    /// <summary>
-    /// 針對 EquipmentsController 的單元測試
-    /// 測試重點：驗證 Controller 與 Repository 之間的互動邏輯，確保在不同搜尋條件下呼叫正確的資料存取方法。
-    /// </summary>
     public class EquipmentsControllerTests
     {
-        // 定義 Mock 物件，用於模擬 Repository 行為
+        // 模擬的 Repository
         private readonly Mock<IEquipmentRepository> _mockEqRepo;
         private readonly Mock<IRepository<Brand>> _mockBrandRepo;
 
-        // 被測試目標 (System Under Test, SUT)
+        // 要測試的 Controller
         private readonly EquipmentsController _controller;
 
         public EquipmentsControllerTests()
         {
-            // --- Setup (初始化) ---
-
-            // 初始化 Mock 物件
+            // 1. 初始化 Mock 物件
             _mockEqRepo = new Mock<IEquipmentRepository>();
             _mockBrandRepo = new Mock<IRepository<Brand>>();
 
-            // 透過依賴注入 (DI) 將 Mock 物件注入 Controller
+            // 2. 把 Mock 注入到 Controller 裡面
             _controller = new EquipmentsController(_mockEqRepo.Object, _mockBrandRepo.Object);
         }
 
         [Fact]
         public async Task Index_ReturnsAllEquipments_WhenSearchStringIsEmpty()
         {
-            // --- Arrange (準備) ---
-            // 準備預期回傳的假資料 (Mock Data)
+            // Arrange
+            // 準備兩筆假資料
             var fakeList = new List<Equipment>
             {
                 new Equipment { ModelName = "Fake Headphone 1" },
                 new Equipment { ModelName = "Fake DAC" }
             };
 
-            // 設定 Mock 行為：當呼叫 GetAllWithBrandsAsync 時，回傳上述假資料
+            // 設定 Mock：當呼叫 GetAllWithBrandsAsync 時，回傳上面的假資料
             _mockEqRepo.Setup(repo => repo.GetAllWithBrandsAsync())
                        .ReturnsAsync(fakeList);
 
-            // --- Act (執行) ---
-            // 執行測試目標方法，傳入 null 模擬無搜尋條件
+            // Act
+            // 呼叫 Index，參數傳 null 代表沒有搜尋
             var result = await _controller.Index(null);
 
-            // --- Assert (驗證) ---
-            // 1. 驗證回傳型別是否為 ViewResult
+            // Assert
+            // 確保回傳的是 ViewResult
             var viewResult = Assert.IsType<ViewResult>(result);
 
-            // 2. 驗證 Model 資料是否正確映射且數量相符
+            // 確保 Model 裡的資料數量正確 (應該是 2 筆)
             var model = Assert.IsAssignableFrom<IEnumerable<Equipment>>(viewResult.ViewData.Model);
             Assert.Equal(2, model.Count());
 
-            // 3. 行為驗證 (Behavior Verification)：
-            // 確保 Controller 正確呼叫了 "取得所有資料" 的方法 (應執行 1 次)
+            // 驗證：應該要呼叫 "取得所有資料" 的方法
             _mockEqRepo.Verify(repo => repo.GetAllWithBrandsAsync(), Times.Once);
 
-            // 確保 Controller 未呼叫 "搜尋" 方法 (應執行 0 次)
+            // 驗證：不應該呼叫 "搜尋" 的方法
             _mockEqRepo.Verify(repo => repo.SearchAsync(It.IsAny<string>()), Times.Never);
         }
 
         [Fact]
         public async Task Index_CallsSearchMethod_WhenSearchStringIsProvided()
         {
-            // --- Arrange (準備) ---
+            // Arrange
             string keyword = "Sony";
 
-            // 準備符合搜尋條件的假資料
+            // 準備假資料
             var fakeList = new List<Equipment>
             {
                 new Equipment { ModelName = "Sony IER-M9" }
             };
 
-            // 設定 Mock 行為：僅當傳入參數符合 keyword 時，才回傳假資料
+            // 設定 Mock：只有當搜尋 "Sony" 時，才回傳假資料
             _mockEqRepo.Setup(repo => repo.SearchAsync(keyword))
                        .ReturnsAsync(fakeList);
 
-            // --- Act (執行) ---
-            // 執行測試目標方法，傳入搜尋關鍵字
+            // Act
+            // 呼叫 Index，這次有傳入關鍵字
             var result = await _controller.Index(keyword);
 
-            // --- Assert (驗證) ---
+            // Assert
             var viewResult = Assert.IsType<ViewResult>(result);
             var model = Assert.IsAssignableFrom<IEnumerable<Equipment>>(viewResult.ViewData.Model);
 
-            // 驗證回傳資料筆數 (應為 1 筆)
+            // 確認只拿到單筆資料
             Assert.Single(model);
 
-            // 行為驗證：
-            // 確保 Controller 正確呼叫了 "搜尋" 方法 (應執行 1 次)
+            // 驗證：這次應該要呼叫 "SearchAsync"
             _mockEqRepo.Verify(repo => repo.SearchAsync(keyword), Times.Once);
 
-            // 確保 Controller 未呼叫 "取得所有資料" 方法 (應執行 0 次)
+            // 驗證：這次不應該呼叫 "GetAllWithBrandsAsync"
             _mockEqRepo.Verify(repo => repo.GetAllWithBrandsAsync(), Times.Never);
         }
     }
