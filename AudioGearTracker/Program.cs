@@ -12,14 +12,14 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(connectionString));
 
-// 2. 註冊 Repository (為了之後 Controller 使用)
+// 2. 註冊 Repository
 builder.Services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
 
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
-// ... (以下保持預設) ...
+// 預設
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
