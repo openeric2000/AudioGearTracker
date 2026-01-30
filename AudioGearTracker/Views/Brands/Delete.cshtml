@@ -1,33 +1,36 @@
 ﻿@model AudioGearTracker.Core.Entities.Brand
 
 @{
-    ViewData["Title"] = "Delete";
+    ViewData["Title"] = "刪除品牌";
 }
 
-<h1>Delete</h1>
+<div class="max-w-xl mx-auto mt-10">
+    <div class="bg-white rounded-2xl shadow-xl border border-red-100 overflow-hidden">
+        <div class="bg-red-50 px-8 py-6 border-b border-red-100 text-center">
+            <div class="w-16 h-16 bg-red-100 rounded-full mx-auto flex items-center justify-center mb-4 text-red-600">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
+            </div>
+            <h1 class="text-2xl font-bold text-red-900">移除品牌</h1>
+            <p class="text-red-700 text-sm mt-1">注意：刪除品牌可能會影響關聯的器材資料。</p>
+        </div>
 
-<h3>Are you sure you want to delete this?</h3>
-<div>
-    <h4>Brand</h4>
-    <hr />
-    <dl class="grid grid-cols-1 sm:grid-cols-6 gap-x-4">
-        <dt class="col-span-1 sm:col-span-2 font-bold text-gray-700">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class="col-span-1 sm:col-span-4 text-gray-900">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class="col-span-1 sm:col-span-2 font-bold text-gray-700">
-            @Html.DisplayNameFor(model => model.Country)
-        </dt>
-        <dd class="col-span-1 sm:col-span-4 text-gray-900">
-            @Html.DisplayFor(model => model.Country)
-        </dd>
-    </dl>
-    
-    <form asp-action="Delete">
-        <input type="hidden" asp-for="Id" />
-        <input type="submit" value="Delete" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline cursor-pointer" /> |
-        <a asp-action="Index" class="text-indigo-600 hover:text-indigo-900">Back to List</a>
-    </form>
+        <div class="p-8 text-center">
+            <h2 class="text-3xl font-black text-gray-800 mb-2">@Html.DisplayFor(model => model.Name)</h2>
+            <p class="text-gray-500">@Html.DisplayFor(model => model.Country)</p>
+        </div>
+
+        <div class="bg-gray-50 px-8 py-4 border-t border-gray-100 flex gap-3">
+            <form asp-action="Delete" class="w-full">
+                <input type="hidden" asp-for="Id" />
+                <button type="submit" class="w-full px-6 py-3 bg-red-600 hover:bg-red-700 text-white font-bold rounded-xl transition-colors shadow-lg shadow-red-600/20">
+                    確認刪除
+                </button>
+            </form>
+            <a asp-action="Index" class="w-full px-6 py-3 bg-white border border-gray-200 text-center text-gray-600 font-bold rounded-xl hover:bg-gray-50 transition-colors">
+                取消
+            </a>
+        </div>
+    </div>
 </div>
