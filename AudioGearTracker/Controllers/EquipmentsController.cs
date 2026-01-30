@@ -44,18 +44,32 @@ namespace AudioGearTracker.Controllers
         {
             if (string.IsNullOrWhiteSpace(term)) return Json(new List<object>());
 
-            // 使用 Repository 進行搜尋
-            var searchResults = await _equipmentRepo.SearchAsync(term);
+            var cleanTerm = term.Trim().ToLower();
 
-            // 在記憶體中進行投影 (Projection) 轉成 JSON 格式
-            var jsonResult = searchResults
+            // 1. 從 Repo 撈資料
+            var searchResults = await _equipmentRepo.SearchAsync(cleanTerm);
+
+            // 2. 記憶體排序 (權重邏輯)
+            var sortedResults = searchResults
+                .OrderByDescending(e =>
+                {
+                    // 計算權重分數
+                    int score = 0;
+                    if (e.ModelName.Trim().StartsWith(cleanTerm, StringComparison.OrdinalIgnoreCase)) score += 100; // 開頭命中 +100分
+                    if (e.Brand?.Name.Trim().StartsWith(cleanTerm, StringComparison.OrdinalIgnoreCase) ?? false) score += 50; // 品牌開頭命中 +50分
+                    return score;
+                })
+                .ThenBy(e => e.ModelName); // 同分則照字母排
+
+            // 3. 投影 JSON
+            var jsonResult = sortedResults
                 .Select(e => new {
                     id = e.Id,
                     title = e.ModelName,
                     subtitle = $"{e.Brand?.Name} · {e.Type}",
                     url = Url.Action("Details", "Equipments", new { id = e.Id })
                 })
-                .Take(8); // 只取前 8 筆
+                .Take(8);
 
             return Json(jsonResult);
         }
