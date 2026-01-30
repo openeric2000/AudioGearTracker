@@ -9,31 +9,31 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<table class="table">
-    <thead>
+<table class="min-w-full divide-y divide-gray-200">
+    <thead class="bg-gray-50">
         <tr>
-            <th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 @Html.DisplayNameFor(model => model.Name)
             </th>
-            <th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 @Html.DisplayNameFor(model => model.Country)
             </th>
-            <th></th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"></th>
         </tr>
     </thead>
-    <tbody>
+    <tbody class="bg-white divide-y divide-gray-200">
 @foreach (var item in Model) {
         <tr>
-            <td>
+            <td class="px-6 py-4 whitespace-nowrap">
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
-            <td>
+            <td class="px-6 py-4 whitespace-nowrap">
                 @Html.DisplayFor(modelItem => item.Country)
             </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            <td class="px-6 py-4 whitespace-nowrap">
+                <a class="text-indigo-600 hover:text-indigo-900" asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a class="text-indigo-600 hover:text-indigo-900" asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a class="text-indigo-600 hover:text-indigo-900" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
             </td>
         </tr>
 }

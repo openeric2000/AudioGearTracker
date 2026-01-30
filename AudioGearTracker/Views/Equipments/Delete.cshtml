@@ -10,54 +10,54 @@
 <div>
     <h4>Equipment</h4>
     <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
+    <dl class="grid grid-cols-1 sm:grid-cols-6 gap-x-4">
+        <dt class="col-span-1 sm:col-span-2 font-bold text-gray-700">
             @Html.DisplayNameFor(model => model.ModelName)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-span-1 sm:col-span-4 text-gray-900">
             @Html.DisplayFor(model => model.ModelName)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-span-1 sm:col-span-2 font-bold text-gray-700">
             @Html.DisplayNameFor(model => model.Type)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-span-1 sm:col-span-4 text-gray-900">
             @Html.DisplayFor(model => model.Type)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-span-1 sm:col-span-2 font-bold text-gray-700">
             @Html.DisplayNameFor(model => model.Price)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-span-1 sm:col-span-4 text-gray-900">
             @Html.DisplayFor(model => model.Price)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-span-1 sm:col-span-2 font-bold text-gray-700">
             @Html.DisplayNameFor(model => model.PurchaseDate)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-span-1 sm:col-span-4 text-gray-900">
             @Html.DisplayFor(model => model.PurchaseDate)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-span-1 sm:col-span-2 font-bold text-gray-700">
             @Html.DisplayNameFor(model => model.ReviewScore)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-span-1 sm:col-span-4 text-gray-900">
             @Html.DisplayFor(model => model.ReviewScore)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-span-1 sm:col-span-2 font-bold text-gray-700">
             @Html.DisplayNameFor(model => model.Notes)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-span-1 sm:col-span-4 text-gray-900">
             @Html.DisplayFor(model => model.Notes)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-span-1 sm:col-span-2 font-bold text-gray-700">
             @Html.DisplayNameFor(model => model.Brand)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-span-1 sm:col-span-4 text-gray-900">
             @Html.DisplayFor(model => model.Brand.Country)
         </dd>
     </dl>
     
     <form asp-action="Delete">
         <input type="hidden" asp-for="Id" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
+        <input type="submit" value="Delete" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline cursor-pointer" /> |
+        <a asp-action="Index" class="text-indigo-600 hover:text-indigo-900">Back to List</a>
     </form>
 </div>

@@ -8,48 +8,48 @@
 
 <h4>Equipment</h4>
 <hr />
-<div class="row">
-    <div class="col-md-4">
+<div class="flex flex-wrap">
+    <div class="w-full md:w-1/3">
         <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div asp-validation-summary="ModelOnly" class="text-red-500 text-sm mb-4"></div>
             <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="ModelName" class="control-label"></label>
-                <input asp-for="ModelName" class="form-control" />
-                <span asp-validation-for="ModelName" class="text-danger"></span>
+            <div class="mb-4">
+                <label asp-for="ModelName" class="block text-gray-700 font-bold mb-2"></label>
+                <input asp-for="ModelName" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
+                <span asp-validation-for="ModelName" class="text-red-500 text-sm"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Type" class="control-label"></label>
-                <select asp-for="Type" class="form-control"></select>
-                <span asp-validation-for="Type" class="text-danger"></span>
+            <div class="mb-4">
+                <label asp-for="Type" class="block text-gray-700 font-bold mb-2"></label>
+                <select asp-for="Type" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"></select>
+                <span asp-validation-for="Type" class="text-red-500 text-sm"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Price" class="control-label"></label>
-                <input asp-for="Price" class="form-control" />
-                <span asp-validation-for="Price" class="text-danger"></span>
+            <div class="mb-4">
+                <label asp-for="Price" class="block text-gray-700 font-bold mb-2"></label>
+                <input asp-for="Price" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
+                <span asp-validation-for="Price" class="text-red-500 text-sm"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="PurchaseDate" class="control-label"></label>
-                <input asp-for="PurchaseDate" class="form-control" />
-                <span asp-validation-for="PurchaseDate" class="text-danger"></span>
+            <div class="mb-4">
+                <label asp-for="PurchaseDate" class="block text-gray-700 font-bold mb-2"></label>
+                <input asp-for="PurchaseDate" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
+                <span asp-validation-for="PurchaseDate" class="text-red-500 text-sm"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="ReviewScore" class="control-label"></label>
-                <input asp-for="ReviewScore" class="form-control" />
-                <span asp-validation-for="ReviewScore" class="text-danger"></span>
+            <div class="mb-4">
+                <label asp-for="ReviewScore" class="block text-gray-700 font-bold mb-2"></label>
+                <input asp-for="ReviewScore" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
+                <span asp-validation-for="ReviewScore" class="text-red-500 text-sm"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Notes" class="control-label"></label>
-                <input asp-for="Notes" class="form-control" />
-                <span asp-validation-for="Notes" class="text-danger"></span>
+            <div class="mb-4">
+                <label asp-for="Notes" class="block text-gray-700 font-bold mb-2"></label>
+                <input asp-for="Notes" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
+                <span asp-validation-for="Notes" class="text-red-500 text-sm"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="BrandId" class="control-label"></label>
-                <select asp-for="BrandId" class="form-control" asp-items="ViewBag.BrandId"></select>
-                <span asp-validation-for="BrandId" class="text-danger"></span>
+            <div class="mb-4">
+                <label asp-for="BrandId" class="block text-gray-700 font-bold mb-2"></label>
+                <select asp-for="BrandId" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" asp-items="ViewBag.BrandId"></select>
+                <span asp-validation-for="BrandId" class="text-red-500 text-sm"></span>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+            <div class="mb-4">
+                <input type="submit" value="Save" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline cursor-pointer" />
             </div>
         </form>
     </div>
