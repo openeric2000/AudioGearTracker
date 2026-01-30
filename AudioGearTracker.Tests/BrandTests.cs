@@ -11,12 +11,13 @@ namespace AudioGearTracker.Tests
         [Fact]
         public void NewBrand_Should_Have_Empty_EquipmentList()
         {
+            // Arrange
             var brand = new Brand();
 
             var list = brand.Equipments;
 
+            // Assert
             Assert.NotNull(list);
-
             Assert.Empty(list);
         }
 
