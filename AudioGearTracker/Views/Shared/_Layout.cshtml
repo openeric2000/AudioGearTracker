@@ -1,7 +1,7 @@
 ﻿@using Microsoft.AspNetCore.Hosting
 @using Microsoft.AspNetCore.Mvc.ViewEngines
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-tw">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -9,45 +9,43 @@
     <script src="https://unpkg.com/@@tailwindcss/browser@4"></script>
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/AudioGearTracker.styles.css" asp-append-version="true" />
+
+    <style type="text/tailwindcss">
+        @@theme {
+            --color-lilac: #cd99d6;
+            --color-lilac-hover: #b57bbf;
+            --color-lilac-bg: #fbf5fc;
+        }
+
+        body {
+            /* 預設字體與背景 */
+            @@apply bg-gray-50 text-gray-800 font-sans antialiased;
+        }
+    </style>
 </head>
-<body>
-    <header>
-        <nav class="bg-white border-b border-gray-200 mb-3 shadow-md">
-            <div class="container mx-auto px-4 flex flex-wrap items-center justify-between py-3">
-                <a class="text-xl font-bold text-gray-800 hover:text-gray-600" asp-area="" asp-controller="Home" asp-action="Index">AudioGearTracker</a>
-                <button class="block sm:hidden text-gray-500 hover:text-gray-700 focus:outline-none" type="button" onclick="document.getElementById('navbar-menu').classList.toggle('hidden');">
-                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                    </svg>
-                </button>
-                <div id="navbar-menu" class="hidden sm:flex w-full sm:w-auto items-center sm:justify-between mt-2 sm:mt-0">
-                    <ul class="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-6 list-none mb-0 pl-0">
-                        <li class="nav-item">
-                            <a class="text-gray-700 hover:text-gray-900" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="text-gray-700 hover:text-gray-900" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="text-gray-700 hover:text-gray-900" asp-area="" asp-controller="Brands" asp-action="Index">品牌管理</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="text-gray-700 hover:text-gray-900" asp-area="" asp-controller="Equipments" asp-action="Index">器材清單</a>
-                        </li>
-                    </ul>
-                </div>
+<body class="flex flex-col min-h-screen bg-gray-50">
+    <header class="sticky top-0 z-50 backdrop-blur-md bg-white/80 border-b border-gray-200 shadow-sm">
+        <nav class="container mx-auto px-6 h-16 flex justify-between items-center">
+            <a asp-controller="Home" asp-action="Index" class="text-2xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-lilac to-purple-600 hover:opacity-80 transition-opacity">
+                AudioGear<span class="text-gray-700">Tracker</span>
+            </a>
+
+            <div class="flex items-center space-x-8">
+                <a asp-controller="Brands" asp-action="Index" class="text-sm font-medium text-gray-600 hover:text-lilac transition-colors">品牌管理</a>
+
+                <a asp-controller="Equipments" asp-action="Index" class="px-5 py-2 text-sm font-bold text-white bg-lilac rounded-full shadow-lg shadow-lilac/30 hover:bg-lilac-hover hover:-translate-y-0.5 transition-all duration-300">
+                    器材清單
+                </a>
             </div>
         </nav>
     </header>
-    <div class="container mx-auto px-4">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
+    <main role="main" class="flex-grow container mx-auto px-6 py-8">
+        @RenderBody()
+    </main>
 
-    <footer class="border-t border-gray-200 text-gray-500 py-4 mt-auto">
-        <div class="container mx-auto px-4">
-            &copy; 2026 - AudioGearTracker - <a class="text-blue-600 hover:underline" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    <footer class="border-t border-gray-200 bg-white py-6 mt-auto">
+        <div class="container mx-auto px-6 text-center text-sm text-gray-500">
+            &copy; 2026 - AudioGearTracker - <span class="text-lilac font-semibold">Designed for Audiophiles</span>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
