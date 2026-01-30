@@ -1,3 +1,5 @@
 <Solution>
+  <Project Path="AudioGearTracker.Core/AudioGearTracker.Core.csproj" />
+  <Project Path="AudioGearTracker.Infrastructure/AudioGearTracker.Infrastructure.csproj" />
   <Project Path="AudioGearTracker/AudioGearTracker.csproj" />
 </Solution>
