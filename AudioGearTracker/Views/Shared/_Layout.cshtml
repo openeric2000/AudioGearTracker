@@ -2,6 +2,7 @@
 @using Microsoft.AspNetCore.Mvc.ViewEngines
 <!DOCTYPE html>
 <html lang="zh-tw">
+
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -9,6 +10,9 @@
     <script src="https://unpkg.com/@@tailwindcss/browser@4"></script>
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/AudioGearTracker.styles.css" asp-append-version="true" />
+    <!-- Flatpickr CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" type="text/css" href="https://npmcdn.com/flatpickr/dist/themes/airbnb.css">
 
     <style type="text/tailwindcss">
         @@theme {
@@ -21,37 +25,48 @@
             /* 預設字體與背景 */
             @@apply bg-gray-50 text-gray-800 font-sans antialiased;
         }
+
+        /* Flatpickr Lilac Theme Overrides */
+        .flatpickr-day.selected, .flatpickr-day.startRange, .flatpickr-day.endRange, .flatpickr-day.selected.inRange, .flatpickr-day.startRange.inRange, .flatpickr-day.endRange.inRange, .flatpickr-day.selected:focus, .flatpickr-day.startRange:focus, .flatpickr-day.endRange:focus, .flatpickr-day.selected:hover, .flatpickr-day.startRange:hover, .flatpickr-day.endRange:hover, .flatpickr-day.selected.prevMonthDay, .flatpickr-day.startRange.prevMonthDay, .flatpickr-day.endRange.prevMonthDay, .flatpickr-day.selected.nextMonthDay, .flatpickr-day.startRange.nextMonthDay, .flatpickr-day.endRange.nextMonthDay {
+            background: #cd99d6 !important;
+            border-color: #cd99d6 !important;
+        }
     </style>
 </head>
+
 <body class="flex flex-col min-h-screen bg-gray-50">
     <header class="sticky top-0 z-50 backdrop-blur-md bg-white/80 border-b border-gray-200 shadow-sm">
         <nav class="container mx-auto px-6 h-16 flex items-center justify-between gap-8">
 
-            <a asp-controller="Home" asp-action="Index" class="flex-shrink-0 text-2xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-lilac to-purple-600 hover:opacity-80 transition-opacity">
+            <a asp-controller="Home" asp-action="Index"
+                class="flex-shrink-0 text-2xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-lilac to-purple-600 hover:opacity-80 transition-opacity">
                 AudioGear<span class="text-gray-700">Tracker</span>
             </a>
 
             <div class="relative flex-grow max-w-lg hidden md:block">
                 <div class="relative">
-                    <input type="text" id="global-search"
-                           placeholder="搜尋器材 (例如: Sony, DAC...)"
-                           class="w-full pl-10 pr-4 py-2 bg-gray-100 border-transparent text-gray-700 rounded-full focus:bg-white focus:border-lilac focus:ring-2 focus:ring-lilac/50 transition-all placeholder-gray-400 outline-none"
-                           autocomplete="off" />
+                    <input type="text" id="global-search" placeholder="搜尋器材 (例如: Sony, DAC...)"
+                        class="w-full pl-10 pr-4 py-2 bg-gray-100 border-transparent text-gray-700 rounded-full focus:bg-white focus:border-lilac focus:ring-2 focus:ring-lilac/50 transition-all placeholder-gray-400 outline-none"
+                        autocomplete="off" />
 
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                         <svg class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                         </svg>
                     </div>
                 </div>
 
-                <div id="search-results" class="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden hidden z-50">
+                <div id="search-results"
+                    class="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden hidden z-50">
                 </div>
             </div>
 
             <div class="flex items-center space-x-6 flex-shrink-0">
-                <a asp-controller="Brands" asp-action="Index" class="text-sm font-medium text-gray-600 hover:text-lilac transition-colors hidden sm:block">品牌管理</a>
-                <a asp-controller="Equipments" asp-action="Index" class="px-5 py-2 text-sm font-bold text-white bg-lilac rounded-full shadow-lg shadow-lilac/30 hover:bg-lilac-hover hover:-translate-y-0.5 transition-all duration-300">
+                <a asp-controller="Brands" asp-action="Index"
+                    class="text-sm font-medium text-gray-600 hover:text-lilac transition-colors hidden sm:block">品牌管理</a>
+                <a asp-controller="Equipments" asp-action="Index"
+                    class="px-5 py-2 text-sm font-bold text-white bg-lilac rounded-full shadow-lg shadow-lilac/30 hover:bg-lilac-hover hover:-translate-y-0.5 transition-all duration-300">
                     器材清單
                 </a>
             </div>
@@ -59,13 +74,13 @@
     </header>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const searchInput = document.getElementById('global-search');
             const resultsBox = document.getElementById('search-results');
             let debounceTimer;
 
             // 監聽打字事件
-            searchInput.addEventListener('input', function(e) {
+            searchInput.addEventListener('input', function (e) {
                 const term = e.target.value.trim();
 
                 // 清除之前的計時器 (Debounce: 避免每打一個字就發請求)
@@ -112,14 +127,14 @@
             });
 
             // 點擊外部時關閉選單
-            document.addEventListener('click', function(e) {
+            document.addEventListener('click', function (e) {
                 if (!searchInput.contains(e.target) && !resultsBox.contains(e.target)) {
                     resultsBox.classList.add('hidden');
                 }
             });
 
             // 聚焦時如果有字就重新顯示
-            searchInput.addEventListener('focus', function() {
+            searchInput.addEventListener('focus', function () {
                 if (searchInput.value.trim().length > 0 && resultsBox.children.length > 0) {
                     resultsBox.classList.remove('hidden');
                 }
@@ -138,6 +153,24 @@
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <!-- Flatpickr JS -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://npmcdn.com/flatpickr/dist/l10n/zh-tw.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            flatpickr(".datepicker", {
+                "locale": "zh_tw",
+                dateFormat: "Y-m-d",
+                allowInput: true,
+                altInput: true,
+                altFormat: "Y/m/d",
+                disableMobile: "true" // Force flatpickr on mobile too for consistency
+            });
+        });
+    </script>
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
+
 </html>
