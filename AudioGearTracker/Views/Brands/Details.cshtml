@@ -1,30 +1,32 @@
 ﻿@model AudioGearTracker.Core.Entities.Brand
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "品牌詳情";
 }
 
-<h1>Details</h1>
+<div class="w-full max-w-3xl mx-auto px-4 md:px-0">
+    <div class="mb-6">
+        <a asp-action="Index" class="text-gray-500 hover:text-lilac transition-colors flex items-center group">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1 group-hover:-translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            返回列表
+        </a>
+    </div>
 
-<div>
-    <h4>Brand</h4>
-    <hr />
-    <dl class="grid grid-cols-1 sm:grid-cols-6 gap-x-4">
-        <dt class="col-span-1 sm:col-span-2 font-bold text-gray-700">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class="col-span-1 sm:col-span-4 text-gray-900">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class="col-span-1 sm:col-span-2 font-bold text-gray-700">
-            @Html.DisplayNameFor(model => model.Country)
-        </dt>
-        <dd class="col-span-1 sm:col-span-4 text-gray-900">
-            @Html.DisplayFor(model => model.Country)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <div class="bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden">
+        <div class="bg-gray-50/50 px-6 py-8 border-b border-gray-100"> 
+            <h1 class="text-3xl font-black text-gray-800 tracking-tight">@Html.DisplayFor(model => model.Name)</h1>
+            <div class="mt-2 inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-600 border border-gray-200">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                @Html.DisplayFor(model => model.Country)
+            </div>
+        </div>
+        
+        <div class="bg-white px-6 py-4 flex justify-end gap-3">
+            <a asp-action="Edit" asp-route-id="@Model?.Id" class="px-6 py-2 bg-lilac hover:bg-lilac-hover text-white font-bold rounded-xl shadow-md transition-all">編輯品牌</a>
+        </div>
+    </div>
 </div>
