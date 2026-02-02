@@ -42,7 +42,7 @@ namespace AudioGearTracker.Tests
 
             // 設定 Mock：當呼叫 GetAllWithBrandsAsync 時，回傳上面的假資料
             _mockEqRepo.Setup(repo => repo.GetAllWithBrandsAsync())
-                       .ReturnsAsync(fakeList);
+                        .ReturnsAsync(fakeList);
 
             // Act
             // 呼叫 Index，參數傳 null 代表沒有搜尋
@@ -77,7 +77,7 @@ namespace AudioGearTracker.Tests
 
             // 設定 Mock：只有當搜尋 "Sony" 時，才回傳假資料
             _mockEqRepo.Setup(repo => repo.SearchAsync(keyword))
-                       .ReturnsAsync(fakeList);
+                        .ReturnsAsync(fakeList);
 
             // Act
             // 呼叫 Index，這次有傳入關鍵字

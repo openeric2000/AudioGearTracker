@@ -16,7 +16,7 @@
         </a>
     </div>
 
-    <div class="overflow-hidden bg-white border border-gray-200 rounded-2xl shadow-sm">
+    <div class="hidden md:block overflow-hidden bg-white border border-gray-200 rounded-2xl shadow-sm">
         <table class="w-full text-left border-collapse">
             <thead class="bg-gray-50 border-b border-gray-200">
                 <tr>
@@ -52,5 +52,34 @@
                 }
             </tbody>
         </table>
+    </div>
+
+    <!-- Mobile Cards View -->
+    <div class="md:hidden space-y-4">
+        @foreach (var item in Model)
+        {
+            <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 flex flex-col space-y-3">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <h3 class="font-bold text-gray-800 text-xl">@Html.DisplayFor(modelItem => item.Name)</h3>
+                        <div class="mt-2">
+                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600 border border-gray-200">
+                                @Html.DisplayFor(modelItem => item.Country)
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="pt-3 border-t border-gray-50 flex justify-end space-x-4">
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="flex items-center text-sm font-bold text-lilac hover:text-lilac-hover">
+                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+                        編輯
+                    </a>
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="flex items-center text-sm font-bold text-red-400 hover:text-red-600">
+                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                        刪除
+                    </a>
+                </div>
+            </div>
+        }
     </div>
 </div>

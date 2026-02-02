@@ -1,28 +1,28 @@
-using AudioGearTracker.Core.Interfaces;
+ï»¿using AudioGearTracker.Core.Interfaces;
 using AudioGearTracker.Infrastructure.Data;
 using AudioGearTracker.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// ³]©w DB Context
+// è¨­å®š DB Context
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
     ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(connectionString));
 
-// µù¥U Repository
+// è¨»å†Š Repository
 builder.Services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
 
-// µù¥U±MÄİªº EquipmentRepository
+// è¨»å†Šå°ˆå±¬çš„ EquipmentRepository
 builder.Services.AddScoped<IEquipmentRepository, EquipmentRepository>();
 
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
-// ¹w³]
+// é è¨­
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
